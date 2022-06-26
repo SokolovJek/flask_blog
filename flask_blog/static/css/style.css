@@ -1,0 +1,50 @@
+:root{
+    --color:#05b1b1;
+    --color2:#52339a;
+}
+
+section{
+    padding: 100px 0;
+}
+
+footer{
+    padding: 50px 0;
+}
+
+header{
+    padding: 20px 0;
+}
+
+
+header, footer {
+    background:  var(--color);
+}
+
+section{
+    background: var(--color2);
+}
+
+
+
+
+h1 {
+    border: 2px #eee solid;
+    color: brown;
+    text-align: center;
+    padding: 10px;
+}
+
+
+.post{
+    border: 2px #eee solid;
+}
+
+/* акаунт */
+.account{
+    padding: 50px 0;
+
+}
+
+
+
+

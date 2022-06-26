@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    SokolovBlog
+{% endblock %}
+
+{% block content %}
+    <header>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center text-white">
+                        {% if current_user.is_authenticated %}
+                            Привет {{ current_user.username }}! Вы готовы содздать новый блог?
+                        {% else %}
+                            Welcome to SokolovBlog
+                        {% endif %}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+   <section class="post">
+        <h2 class="text-center">Post1</h2>
+        <h5 class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid deleniti ducimus odio odit porro qui quos veritatis. Accusantium cum dicta eligendi ipsam labore laudantium odit quo soluta unde voluptatum.</h5>
+   </section>
+
+    <section class="post">
+        <h2 class="text-center">Post2</h2>
+        <h5 class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid deleniti ducimus odio odit porro qui quos veritatis. Accusantium cum dicta eligendi ipsam labore laudantium odit quo soluta unde voluptatum.</h5>
+   </section>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    HelloWorld & Co
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+{% endblock %}
