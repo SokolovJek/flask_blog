@@ -52,7 +52,7 @@ def login():
 @login_required
 def account():
     """
-    Контролер для редактирования данных пользователя
+    Контролерh для редактирования данных пользователя
     :return:
     """
     form = UpdateAccountForm()
