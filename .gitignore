@@ -130,4 +130,4 @@ dmypy.json
 
 
 flask_blog/site.db
-
+flask_blog/config.py
