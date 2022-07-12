@@ -56,27 +56,26 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('Это имя занято. Позжалуйста, выберите другое.')
 
     def validate_email(self, email):
-        """Проверка наличия username в БД, если есть то ошибка"""
+        """Проверка наличия email в БД, если есть то ошибка"""
 
+        # если эмейл отличается от текущего то ...
         if email.data != current_user.email:
-            user = User.query.filter_by(username=email.data).first()
-            if user:
-                raise ValidationError('Это имя занято. Позжалуйста, выберите другое.')
+            email = User.query.filter_by(email=email.data).first()
+            if email:
+                raise ValidationError('Эта электронная почта занята. Позжалуйста, выберите другую.')
 
 
 class RequestResetForm(FlaskForm):
     """
-    Если пользователь захочет изменить данные, в частности пароль, реализуем отдельную форму
-    для запросса на редактирование.
+    Форма отправки запроса на изменения пароля
     """
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Изменить пароль')
 
-    @staticmethod
-    def validate_email(email):
+    def validate_email(self, email):
         """Если пользователь захочет сменить пароль, запускаем функцию которая проверяет наличие email в БД.
         Если пароля нет, предлагаем создать новый акаунт"""
-        user = User.query.filter_by(username=email.data).first()
+        user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('Акаунт с данным email-адресом отсутствует.'
                                   ' Вы можете зарегестрировать его ')

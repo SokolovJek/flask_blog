@@ -6,6 +6,7 @@ from flask_blog.config import Config
 from flask_bootstrap import Bootstrap
 # вычисление хеша пароля
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
 # создание обьекта класса SQLAlchemy
 db = SQLAlchemy()
@@ -14,9 +15,11 @@ login_manager = LoginManager()
 bootstrap = Bootstrap()
 # создаем обьект
 bcrypt = Bcrypt()
+# создаем обьект для отправки почты
+mail = Mail()
 
 
-def create_app():
+def create_app(config_class=Config):
     """
     функция создает обьект Flask
     :return:
@@ -31,6 +34,8 @@ def create_app():
     app.register_blueprint(main)
     from flask_blog.users.routes import users
     app.register_blueprint(users)
+    from flask_blog.posts.routes import posts
+    app.register_blueprint(posts)
 
     # подключение конфигурационного файла, инициализация взаимодействия с БД
     app.config.from_object(Config)
@@ -39,6 +44,8 @@ def create_app():
     login_manager.init_app(app)
     # регистрация Bcrypt
     bcrypt.init_app(app)
+    # регистрация mail
+    mail.init_app(app)
 
     # подключение bootstrap
     # bootstrap.init_app(app)
