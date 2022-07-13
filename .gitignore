@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 
-flask_blog/site.db
+
 
