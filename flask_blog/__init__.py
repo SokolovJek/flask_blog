@@ -36,6 +36,8 @@ def create_app(config_class=Config):
     app.register_blueprint(users)
     from flask_blog.posts.routes import posts
     app.register_blueprint(posts)
+    from flask_blog.errors.hendlers import errors
+    app.register_blueprint(errors)
 
     # подключение конфигурационного файла, инициализация взаимодействия с БД
     app.config.from_object(Config)
