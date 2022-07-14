@@ -1,8 +1,10 @@
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
+import datetime
+import jwt
 
-from . import db
+
 from flask_login import UserMixin
 from flask_blog import db, login_manager
 
@@ -19,25 +21,27 @@ class User(db.Model, UserMixin):
     # lszy - пользователи и посты будут загружатся паралельно, backref - ссылка на запись в post-табл.
     posts = db.relationship('Post', backref='author', lazy=True)
 
-    # реализация механизма востоновления пароля
     def get_reset_token(self, expires_sec=1800):
         """
         Метод создания токена(JSON Web Signature - JWS), используя соль - SECRET_KEY и данные - user_id
         :param expires_sec: через это время токен будет не валидным
         :return:
         """
-        s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-        # сериализуем и полученные байты преобразовываем в строку
-        return s.dumps({'user_id': self.id}).decode('utf-8')
+        key = current_app.config['SECRET_KEY']
+        encoded = jwt.encode(
+            {"exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=expires_sec),
+             'user_id': self.id},
+            key, algorithm="HS256")
+        return encoded
 
     @staticmethod
     def verify_reset_token(token):
         """
         Метод получения пользователя, путем распаковки токенна - JWS
         """
-        s = Serializer(current_app.config['SECRET_KEY'])
+        key = current_app.config['SECRET_KEY']
         try:
-            user_id = s.loads(token)['user_id']
+            user_id = jwt.decode(token, key, leeway=2, algorithms="HS256")['user_id']
         except Exception as a:
             print(f'ошибка {a}', end='\n')
             return None
@@ -46,11 +50,35 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"Пользователь ('{self.username}', '{self.email}', '{self.image_file}')"
 
+    # # реализация механизма востоновления пароля для itsdangerous==2.0.1
+    # def get_reset_token(self, expires_sec=1800):
+    #     """
+    #     Метод создания токена(JSON Web Signature - JWS), используя соль - SECRET_KEY и данные - user_id
+    #     :param expires_sec: через это время токен будет не валидным
+    #     :return:
+    #     """
+    #     s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
+    #     # сериализуем и полученные байты преобразовываем в строку
+    #     return s.dumps({'user_id': self.id}).decode('utf-8')
+    #
+    # @staticmethod
+    # def verify_reset_token(token):
+    #     """
+    #     Метод получения пользователя, путем распаковки токенна - JWS
+    #     """
+    #     s = Serializer(current_app.config['SECRET_KEY'])
+    #     try:
+    #         user_id = s.loads(token)['user_id']
+    #     except Exception as a:
+    #         print(f'ошибка {a}', end='\n')
+    #         return None
+    #     return User.query.get(user_id)
+
 
 class Post(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
