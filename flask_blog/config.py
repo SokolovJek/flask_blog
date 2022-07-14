@@ -7,5 +7,5 @@ class Config:
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'почта@yandex.ru'
-    MAIL_PASSWORD = 'пароль'
+    MAIL_USERNAME = 'sokolov199121@yandex.ru'
+    MAIL_PASSWORD = '7daragn7lora'
