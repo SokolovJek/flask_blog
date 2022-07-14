@@ -24,7 +24,7 @@
     <a class="navbar-brand" href="{{ url_for('main.home')}}">Главная страница</a>
     {% if current_user.is_authenticated %}
 
-        <a class="navbar-brand" href="{{ url_for('users.account')}}">Аккаутн/</a>
+        <a class="navbar-brand" href="{{ url_for('users.account')}}">Аккаутн</a>
         <a class="navbar-brand" href="{{ url_for('users.logout')}}">Выйти</a>
         <a class="navbar-brand" href="{{ url_for('posts.all_posts')}}">Все посты</a>
         <a class="navbar-brand" href="{{ url_for('posts.new_post')}}">Создать пост</a>
